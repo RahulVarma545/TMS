@@ -15,7 +15,11 @@ import {
   Clock3,
   AlertCircle,
   Users,
-  Bell
+  Bell,
+  Zap,
+  Star,
+  Trophy,
+  Lightbulb
 } from 'lucide-react';
 import TaskOverview from '../components/intern/TaskOverview';
 import PerformanceMetrics from '../components/intern/PerformanceMetrics';
@@ -26,9 +30,13 @@ import CommunicationHub from '../components/intern/CommunicationHub';
 import GoalsMilestones from '../components/intern/GoalsMilestones';
 import ProfileSettings from '../components/intern/ProfileSettings';
 import ReportGenerator from '../components/intern/ReportGenerator';
+import ModernSidebar from '../components/common/ModernSidebar';
+import ModernHeader from '../components/common/ModernHeader';
+import { ThemeProvider } from '../components/common/ThemeProvider';
 
 const InternDashboard = () => {
   const [activeSection, setActiveSection] = useState('overview');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [user, setUser] = useState({
     name: 'Alex Johnson',
     role: 'Software Development Intern',
@@ -86,130 +94,147 @@ const InternDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-50 relative">
-      {/* Decorative background shapes */}
-      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-300 opacity-30 blur-2xl z-0" />
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-lg shadow-lg border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center gap-3">
-              <div className="flex-shrink-0">
-                <h1 className="text-2xl font-extrabold text-indigo-700 tracking-tight drop-shadow">🌟 Intern Dashboard</h1>
-              </div>
-              <span className="px-2 py-1 rounded bg-indigo-100 text-indigo-700 text-xs font-semibold ml-2">Beta</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button className="p-2 text-indigo-400 hover:text-indigo-600 transition">
-                <Bell className="h-6 w-6" />
-              </button>
-              <div className="flex items-center space-x-3">
-                <div className="text-right">
-                  <p className="text-base font-bold text-indigo-900">{user.name}</p>
-                  <p className="text-xs text-indigo-500">{user.role}</p>
-                </div>
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg border-2 border-white">
-                  <span className="text-white text-lg font-bold">
-                    {user.name.charAt(0)}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+    <ThemeProvider>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
+        <ModernSidebar
+          userRole="Intern"
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          onLogout={() => console.log('Logout')}
+        />
+        
+        <ModernHeader
+          user={user}
+          notifications={[
+            { title: 'New learning module available', message: 'Advanced React Patterns is now ready', time: '10 minutes ago', read: false },
+            { title: 'Task deadline reminder', message: 'API Integration task due tomorrow', time: '1 hour ago', read: false },
+            { title: 'Feedback received', message: 'Your mentor left feedback on your latest work', time: '2 hours ago', read: true }
+          ]}
+          onProfileClick={() => setActiveSection('profile')}
+          onLogout={() => console.log('Logout')}
+          sidebarCollapsed={sidebarCollapsed}
+        />
 
-      <div className="flex">
-        {/* Sidebar Navigation */}
-        <aside className="w-64 bg-white/80 backdrop-blur-lg shadow-xl min-h-screen border-r border-gray-200 z-10 relative">
-          <nav className="mt-8 px-4">
-            <div className="space-y-2">
-              {navigationItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveSection(item.id)}
-                    className={`w-full flex items-center px-4 py-3 text-base font-semibold rounded-xl transition-all duration-200 shadow-sm ${
-                      activeSection === item.id
-                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg scale-105'
-                        : 'text-indigo-700 bg-white hover:bg-indigo-50 hover:scale-105'
-                    }`}
-                    style={{ boxShadow: activeSection === item.id ? '0 4px 24px rgba(99,102,241,0.15)' : undefined }}
-                  >
-                    <Icon className="mr-3 h-6 w-6" />
-                    {item.label}
-                  </button>
-                );
-              })}
-            </div>
-          </nav>
-        </aside>
 
-        {/* Main Content */}
-        <main className="flex-1 p-8 relative z-10">
-          <div className="max-w-7xl mx-auto">
-            {/* Welcome Banner */}
+        <main className={`pt-20 p-8 transition-all duration-300 ${
+          sidebarCollapsed ? 'ml-20' : 'ml-280'
+        }`}>
+          {/* Welcome Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 rounded-3xl p-8 mb-8 text-white relative overflow-hidden shadow-2xl"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full blur-xl" />
+            <div className="relative flex items-center justify-between">
+              <div>
+                <div className="flex items-center space-x-2 mb-2">
+                  <Star className="w-6 h-6 text-yellow-300" />
+                  <span className="text-yellow-200 text-sm font-medium">Learning Journey</span>
+                </div>
+                <h1 className="text-4xl font-bold mb-2">Welcome back, {user.name}!</h1>
+                <p className="text-white/90 text-lg">
+                  You're making amazing progress in your <span className="font-bold">{user.role}</span> journey!
+                </p>
+              </div>
+              <div className="hidden md:flex items-center space-x-4">
+                <div className="text-center">
+                  <Trophy className="w-8 h-8 text-yellow-300 mx-auto mb-1" />
+                  <div className="text-2xl font-bold">Level 3</div>
+                  <div className="text-white/80 text-sm">Achiever</div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Quick Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 rounded-2xl shadow-2xl p-8 mb-8 text-white relative overflow-hidden"
-              style={{ boxShadow: '0 8px 32px rgba(99,102,241,0.18)' }}
+              transition={{ delay: 0.1 }}
+              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-orange-100 dark:border-gray-700"
             >
-              <div className="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-              <h2 className="text-3xl font-extrabold mb-2 drop-shadow-lg">Welcome back, {user.name}!</h2>
-              <p className="text-indigo-100 text-lg font-medium">
-                You're making great progress in your <span className="font-bold text-white">{user.role}</span>. Keep up the excellent work!
-              </p>
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl shadow-lg">
+                  <CheckCircle className="h-7 w-7 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Completed Tasks</p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.completedTasks}</p>
+                </div>
+              </div>
             </motion.div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl flex items-center gap-4 border border-indigo-100">
-                <div className="p-3 bg-green-100 rounded-xl shadow">
-                  <CheckCircle className="h-7 w-7 text-green-600" />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-yellow-100 dark:border-gray-700"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl shadow-lg">
+                  <Clock3 className="h-7 w-7 text-white" />
                 </div>
                 <div>
-                  <p className="text-base font-semibold text-gray-600">Completed Tasks</p>
-                  <p className="text-3xl font-extrabold text-indigo-900">{stats.completedTasks}</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Pending Tasks</p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.pendingTasks}</p>
                 </div>
               </div>
+            </motion.div>
 
-              <div className="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl flex items-center gap-4 border border-yellow-100">
-                <div className="p-3 bg-yellow-100 rounded-xl shadow">
-                  <Clock3 className="h-7 w-7 text-yellow-600" />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-blue-100 dark:border-gray-700"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl shadow-lg">
+                  <TrendingUp className="h-7 w-7 text-white" />
                 </div>
                 <div>
-                  <p className="text-base font-semibold text-gray-600">Pending Tasks</p>
-                  <p className="text-3xl font-extrabold text-indigo-900">{stats.pendingTasks}</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Attendance</p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.attendanceRate}%</p>
                 </div>
               </div>
+            </motion.div>
 
-              <div className="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl flex items-center gap-4 border border-blue-100">
-                <div className="p-3 bg-blue-100 rounded-xl shadow">
-                  <TrendingUp className="h-7 w-7 text-blue-600" />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-purple-100 dark:border-gray-700"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl shadow-lg">
+                  <Award className="h-7 w-7 text-white" />
                 </div>
                 <div>
-                  <p className="text-base font-semibold text-gray-600">Attendance</p>
-                  <p className="text-3xl font-extrabold text-indigo-900">{stats.attendanceRate}%</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Feedback Score</p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.feedbackScore}/5</p>
                 </div>
               </div>
+            </motion.div>
+          </div>
 
-              <div className="bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl flex items-center gap-4 border border-purple-100">
-                <div className="p-3 bg-purple-100 rounded-xl shadow">
-                  <Award className="h-7 w-7 text-purple-600" />
-                </div>
-                <div>
-                  <p className="text-base font-semibold text-gray-600">Feedback Score</p>
-                  <p className="text-3xl font-extrabold text-indigo-900">{stats.feedbackScore}/5</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Active Section */}
-            <div className="rounded-2xl bg-white/80 backdrop-blur-lg shadow-xl p-6">
-              {renderActiveSection()}
-            </div>
+          {/* Active Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-3xl shadow-xl p-8"
+          >
+            {renderActiveSection()}
+          </motion.div>
+        </main>
+      </div>
+    </ThemeProvider>
+  );
+};
           </div>
         </main>
       </div>
